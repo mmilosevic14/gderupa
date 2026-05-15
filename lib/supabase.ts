@@ -1,33 +1,50 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient as createServerClient } from '@/utils/supabase/server'
+import { createClient as createBrowserClient } from '@/utils/supabase/client'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
-// Environment variables - user needs to set these
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+// Re-export the client creation functions
+export { createServerClient, createBrowserClient }
 
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-  console.warn('⚠️  Supabase environment variables are not set')
+// Database types - Update these based on your Supabase schema
+export type Database = {
+  public: {
+    Tables: {
+      reports: {
+        Row: {
+          id: string
+          user_id: string
+          title: string
+          description: string
+          category: string
+          latitude: number
+          longitude: number
+          photo_url: string | null
+          status: 'pending' | 'in_progress' | 'resolved' | 'rejected'
+          created_at: string
+          updated_at: string
+        }
+        Insert: Omit<Database['public']['Tables']['reports']['Row'], 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Database['public']['Tables']['reports']['Insert']>
+      }
+      users: {
+        Row: {
+          id: string
+          email: string
+          role: 'citizen' | 'deputy' | 'admin'
+          created_at: string
+          updated_at: string
+        }
+        Insert: Omit<Database['public']['Tables']['users']['Row'], 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Database['public']['Tables']['users']['Insert']>
+      }
+    }
+    Views: {}
+    Functions: {}
+    Enums: {}
+  }
 }
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+export type Report = Database['public']['Tables']['reports']['Row']
+export type ReportInsert = Database['public']['Tables']['reports']['Insert']
+export type User = Database['public']['Tables']['users']['Row']
 
-// Types for our data
-export type Report = {
-  id: string
-  title: string
-  description: string
-  category: string
-  latitude: number
-  longitude: number
-  photo_url?: string
-  status: 'pending' | 'in_progress' | 'resolved'
-  created_at: string
-  updated_at: string
-  user_id: string
-}
-
-export type User = {
-  id: string
-  email: string
-  role: 'citizen' | 'deputy' | 'admin'
-  created_at: string
-}
