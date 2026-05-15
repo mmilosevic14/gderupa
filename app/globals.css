@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-gray-50 text-gray-900;
+}
+
+/* Map styles */
+.mapboxgl-canvas {
+  @apply rounded-lg;
+}
+
+.leaflet-container {
+  @apply rounded-lg;
+}
+
+/* Button styles */
+.btn {
+  @apply px-4 py-2 rounded-lg font-medium transition-colors;
+}
+
+.btn-primary {
+  @apply btn bg-primary text-white hover:bg-red-700;
+}
+
+.btn-secondary {
+  @apply btn bg-secondary text-white hover:bg-gray-800;
+}
+
+/* Form styles */
+input,
+textarea,
+select {
+  @apply border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary;
+}
+
+/* Card styles */
+.card {
+  @apply bg-white rounded-lg shadow-md p-4;
+}
